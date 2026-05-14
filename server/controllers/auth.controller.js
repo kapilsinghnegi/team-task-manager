@@ -8,10 +8,12 @@ const signupUser = async (req, res) => {
     return res.status(400).json({ message: "Fill all the required fields" });
   }
 
-  let role = "member";
+  let role;
 
   if (adminInviteCode && adminInviteCode === process.env.ADMIN_INVITE_CODE) {
     role = "admin";
+  } else {
+    role = "member";
   }
 
   try {
@@ -26,6 +28,7 @@ const signupUser = async (req, res) => {
       name,
       email,
       password: hashedPassword,
+      role,
     });
 
     await user.save();
@@ -46,6 +49,53 @@ const signupUser = async (req, res) => {
   }
 };
 
-const loginUser = () => {};
+const loginUser = async (req, res) => {
+  const { email, password } = req.body;
 
-export { signupUser, loginUser };
+  if (!email || !password) {
+    return res.status(400).json({ message: "Fill all the required fields" });
+  }
+
+  try {
+    const user = await User.findOne({ email });
+    if (!user) {
+      return res.status(404).json({ message: "Invalid credentials" });
+    }
+
+    const isMatch = await user.validatePassword(password);
+    if (!isMatch) {
+      return res.status(401).json({ message: "Invalid credentials" });
+    }
+
+    const token = await user.generateAuthToken();
+    res.cookie("token", token, {
+      expires: new Date(
+        Date.now() + process.env.COOKIE_EXPIRES_IN * 24 * 60 * 60 * 1000,
+      ),
+    });
+
+    res.status(200).json({
+      success: true,
+      message: "User logged in successfully",
+      data: {
+        _id: user._id,
+        name: user.name,
+        email: user.email,
+        role: user.role,
+      },
+    });
+  } catch (err) {
+    console.log(err);
+    res.json({ success: false, message: err.message });
+  }
+};
+
+const logoutUser = (_, res) => {
+  res.clearCookie("token");
+  res.status(200).json({
+    success: true,
+    message: "User logged out successfully",
+  });
+};
+
+export { signupUser, loginUser, logoutUser };

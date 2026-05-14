@@ -35,11 +35,11 @@ const userSchema = new mongoose.Schema(
     },
     role: {
       type: String,
+      default: "member",
       enum: {
         values: ["member", "admin"],
         message: "{VALUE} is not supported",
       },
-      default: "member",
     },
   },
   {
