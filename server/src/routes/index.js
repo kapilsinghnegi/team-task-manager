@@ -1,4 +1,5 @@
 import authRouter from "./auth.routes.js";
 import taskRouter from "./task.routes.js";
+import projectRouter from "./project.routes.js";
 
-export { authRouter, taskRouter };
+export { authRouter, projectRouter, taskRouter };

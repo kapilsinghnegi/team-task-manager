@@ -24,9 +24,10 @@ const createTask = async (req, res) => {
     dueDate,
     assignedTo,
     createdBy,
+    project,
   } = req.body;
 
-  if (!title || !dueDate || !assignedTo || !createdBy) {
+  if (!title || !dueDate || !assignedTo || !createdBy || !project) {
     return res.status(400).json({ message: "Fill all the required fields" });
   }
 
@@ -54,6 +55,7 @@ const createTask = async (req, res) => {
       dueDate,
       assignedTo,
       createdBy,
+      project,
     });
     await task.save();
     await task.populate([
@@ -71,10 +73,12 @@ const createTask = async (req, res) => {
 
 const getAllTasks = async (req, res) => {
   try {
-    const tasks = await Task.find().populate([
+    const projectId = req.params.projectId;
+    const tasks = await Task.find({ project: projectId }).populate([
       { path: "assignedTo", select: "name email role" },
       { path: "createdBy", select: "name email role" },
     ]);
+    console.log(tasks);
     return res
       .status(200)
       .json({ message: "Tasks fetched successfully", data: tasks });
@@ -180,6 +184,8 @@ const deleteTask = async (req, res) => {
   }
 };
 
+const getTasksStats = () => {};
+
 export {
   createTask,
   getAllTasks,
@@ -187,4 +193,5 @@ export {
   updateTask,
   updateTaskStatus,
   deleteTask,
+  getTasksStats,
 };

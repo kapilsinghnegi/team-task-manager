@@ -72,6 +72,9 @@ const loginUser = async (req, res) => {
       expires: new Date(
         Date.now() + process.env.COOKIE_EXPIRES_IN * 24 * 60 * 60 * 1000,
       ),
+      httpOnly: true,
+      secure: process.env.NODE_ENV === "production",
+      sameSite: "strict",
     });
 
     res.status(200).json({
@@ -98,4 +101,17 @@ const logoutUser = (_, res) => {
   });
 };
 
-export { signupUser, loginUser, logoutUser };
+const getMe = async (req, res) => {
+  try {
+    res.status(200).json({
+      success: true,
+      message: "User fetched successfully",
+      user: req.user,
+    });
+  } catch (err) {
+    console.log(err);
+    res.json({ success: false, message: err.message });
+  }
+};
+
+export { signupUser, loginUser, logoutUser, getMe };

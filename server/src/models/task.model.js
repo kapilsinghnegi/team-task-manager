@@ -20,7 +20,7 @@ const taskSchema = new mongoose.Schema(
       type: String,
       required: true,
       enum: ["low", "medium", "high"],
-      default: "low",
+      default: "medium",
     },
     status: {
       type: String,
@@ -40,6 +40,11 @@ const taskSchema = new mongoose.Schema(
     createdBy: {
       type: mongoose.Schema.Types.ObjectId,
       ref: "User",
+      required: true,
+    },
+    project: {
+      type: mongoose.Schema.Types.ObjectId,
+      ref: "Project",
       required: true,
     },
   },
