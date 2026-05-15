@@ -12,10 +12,10 @@ import { adminOnly, protect } from "../middlewares/auth.middleware.js";
 const router = express.Router();
 
 router.post("/create", protect, adminOnly, createTask);
-router.get("/", getAllTasks);
-router.get("/:id", getTaskById);
-router.put("/:id", updateTask);
-router.patch("/:id/status", updateTaskStatus);
-router.delete("/:id", deleteTask);
+router.get("/", protect, getAllTasks);
+router.get("/:id", protect, getTaskById);
+router.put("/:id", protect, adminOnly, updateTask);
+router.patch("/:id", protect, updateTaskStatus);
+router.delete("/:id", protect, adminOnly, deleteTask);
 
 export default router;
