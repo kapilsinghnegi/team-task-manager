@@ -78,6 +78,7 @@ Inspired by tools like Trello and Asana.
 
 ### Server
 
+```bash
 server/
 │
 ├── src/
@@ -90,9 +91,11 @@ server/
 │
 ├── server.js
 └── package.json
+```
 
 ### Client
 
+```bash
 client/
 │
 ├── src/
@@ -104,6 +107,7 @@ client/
 │ └── App.jsx
 │
 └── package.json
+```
 
 ## Local Setup
 
@@ -233,3 +237,4 @@ npm run build
 - Add Task Comments
 - Add Task Attachments
 - Add Task Labels
+

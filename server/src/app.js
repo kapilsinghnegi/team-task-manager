@@ -1,14 +1,29 @@
 import express from "express";
 import cookieParser from "cookie-parser";
 import cors from "cors";
-import { authRouter, projectRouter, taskRouter, userRouter } from "./routes/index.js";
+import {
+  authRouter,
+  projectRouter,
+  taskRouter,
+  userRouter,
+} from "./routes/index.js";
 
 const app = express();
+
+app.set("trust proxy", 1);
 
 app.use(
   cors({
     origin: process.env.CLIENT_URL || "http://localhost:5173",
     credentials: true,
+    methods: ["GET", "POST", "PUT", "PATCH", "DELETE", "OPTIONS"],
+    allowedHeaders: [
+      "Origin",
+      "X-Requested-With",
+      "Content-Type",
+      "Accept",
+      "Authorization",
+    ],
   }),
 );
 app.use(express.json());
@@ -25,3 +40,4 @@ app.get("/api", (_, res) => {
 });
 
 export default app;
+
