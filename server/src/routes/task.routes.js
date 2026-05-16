@@ -2,21 +2,20 @@ import express from "express";
 import {
   createTask,
   deleteTask,
-  getAllTasks,
-  getTaskById,
-  getTasksStats,
+  getDashboard,
+  getMyTasks,
+  getProjectTasks,
   updateTask,
-  updateTaskStatus,
 } from "../controllers/task.controller.js";
-import { adminOnly, protect } from "../middlewares/auth.middleware.js";
+import { protect } from "../middlewares/auth.middleware.js";
+import { isProjectMember } from "../middlewares/project.middleware.js";
 
 const router = express.Router();
 
-router.post("/create", protect, adminOnly, createTask);
-router.get("/", protect, getAllTasks);
-router.get("/:id", protect, getTaskById);
-router.put("/:id", protect, adminOnly, updateTask);
-router.patch("/:id", protect, updateTaskStatus);
-router.delete("/:id", protect, adminOnly, deleteTask);
-router.get("/stats", protect, adminOnly, getTasksStats);
+router.get("/dashboard", protect, getDashboard);
+router.get("/mine", protect, getMyTasks);
+router.post("/project/:projectId", protect, isProjectMember, createTask);
+router.get("/project/:projectId", protect, isProjectMember, getProjectTasks);
+router.patch("/:taskId", protect, updateTask);
+router.delete("/:taskId", protect, deleteTask);
 export default router;

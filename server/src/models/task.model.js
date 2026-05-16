@@ -6,7 +6,6 @@ const taskSchema = new mongoose.Schema(
       type: String,
       required: true,
       trim: true,
-      unique: true,
       minLength: 2,
       maxLength: 50,
     },
@@ -25,7 +24,7 @@ const taskSchema = new mongoose.Schema(
     status: {
       type: String,
       required: true,
-      enum: ["todo", "in-progress", "completed"],
+      enum: ["todo", "in-progress", "done"],
       default: "todo",
     },
     dueDate: {
@@ -35,7 +34,6 @@ const taskSchema = new mongoose.Schema(
     assignedTo: {
       type: mongoose.Schema.Types.ObjectId,
       ref: "User",
-      required: true,
     },
     createdBy: {
       type: mongoose.Schema.Types.ObjectId,
@@ -53,5 +51,7 @@ const taskSchema = new mongoose.Schema(
   },
 );
 
-const task = mongoose.model("Task", taskSchema);
-export default task;
+taskSchema.index({ project: 1, title: 1 }, { unique: true });
+
+const Task = mongoose.model("Task", taskSchema);
+export default Task;
