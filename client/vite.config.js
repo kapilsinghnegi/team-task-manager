@@ -14,8 +14,8 @@ export default defineConfig({
       "@": path.resolve(__dirname, "./src"),
     },
   },
-  preview: {
-    allowedHosts: "team-task-manager-ksn.up.railway.app",
+  server: {
+    allowedHosts: ["team-task-manager-ksn.up.railway.app"],
   },
 });
 
